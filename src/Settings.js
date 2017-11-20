@@ -1,5 +1,4 @@
-import cookie from 'react-cookie'
-
+import {set, get, remove} from './utils/cookies'
 
 class Settings {
     constructor(token = 'token', refreshToken = 'refreshToken', tokenPrefix = 'Bearer ') {
@@ -17,34 +16,34 @@ class Settings {
 
     setToken = (token, options = {}) =>
         !token ?
-            cookie.remove(this.tokenName, options) :
-            cookie.save(this.tokenName, token, options)
+            remove(this.tokenName, options) :
+            set(this.tokenName, token, options)
 
 
-    getToken = () => cookie.load(this.tokenName)
+    getToken = () => get(this.tokenName)
 
     setRefreshToken = (refreshToken, options = {}) =>
         !refreshToken ?
-            cookie.remove(this.refreshTokenName, options) :
-            cookie.save(this.refreshTokenName, refreshToken)
+            remove(this.refreshTokenName, options) :
+            set(this.refreshTokenName, refreshToken)
 
-    getRefreshToken = () => cookie.load(this.refreshTokenName)
+    getRefreshToken = () => get(this.refreshTokenName)
 
-    setTokenName = (tokenName) => {
+    setTokenName = tokenName => {
         this.tokenName = tokenName
     }
 
-    setRefreshTokenName = (refreshTokenName) => {
+    setRefreshTokenName = refreshTokenName => {
         this.refreshTokenName = refreshTokenName
     }
 
-    setTokenPrefix = (tokenPrefix) => {
+    setTokenPrefix = tokenPrefix => {
         this.tokenPrefix = tokenPrefix
     }
 
     getTokenPrefix = () => this.tokenPrefix
 
-    setBaseUrl = (baseUrl) => {
+    setBaseUrl = baseUrl => {
         this.baseUrl = baseUrl
     }
 

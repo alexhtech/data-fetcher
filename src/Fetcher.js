@@ -1,8 +1,8 @@
 import qs from 'qs'
-import {select} from 'react-cookie'
 import {
     getBaseUrl, isAuthenticated, getToken, getTokenPrefix
 } from './utils/settings'
+import {getRawData} from './utils/cookies'
 
 
 class Fetcher {
@@ -46,7 +46,7 @@ class Fetcher {
 
             args.headers.set('Accept', 'application/json')
             args.headers.set('Content-Type', 'application/json')
-            args.headers.set('cookie', this.getCookiesData())
+            args.headers.set('cookie', getRawData())
         } else {
             throw new Error(`Type '${type}' - is not supported in the Fetcher`)
         }
@@ -86,19 +86,6 @@ class Fetcher {
     stringify = params => qs.stringify(params, {addQueryPrefix: true}) || ''
 
     parse = queryString => qs.parse(queryString, {ignoreQueryPrefix: true})
-
-    getCookiesData = () => {
-        const cookies = select()
-        let string = ''
-
-        for (const i in cookies) {
-            if (Object.prototype.hasOwnProperty.call(cookies, i)) {
-                string += `${i}=${cookies[i]}; `
-            }
-        }
-
-        return string
-    }
 }
 
 
