@@ -1,0 +1,31 @@
+{
+    "name": "data-fetcher",
+    "version": "0.0.0",
+    "description": "It is just a wrapper around fetch",
+    "repository": "git@github.com:alexolefirenko/data-fetcher.git",
+    "author": "Alex <olefirenk@gmail.com>",
+    "license": "MIT",
+    "main": "./commonjs/index.js",
+    "module": "./es6/index.js",
+    "jsnext:main": "./es6/index.js",
+    "scripts": {
+        "build:es6": "cross-env NODE_ENV=es6 node_modules/babel-cli/bin/babel.js src --out-dir ./es6",
+        "build:commonjs": "cross-env NODE_ENV=commonjs node_modules/babel-cli/bin/babel.js src --out-dir ./commonjs",
+        "build": "npm run clean && npm run build:es6 && npm run build:commonjs",
+        "clean": "rm -rf ./commonjs ./es6"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.6.0",
+        "babel-preset-react": "^6.24.1",
+        "babel-preset-stage-2": "^6.24.1",
+        "cross-env": "^5.1.1"
+    },
+    "peerDependencies": {
+        "react-cookie": "1.0.5"
+    },
+    "dependencies": {
+        "qs": "6.5.1"
+    }
+}
