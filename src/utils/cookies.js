@@ -2,7 +2,7 @@ import Cookies from '../Cookies'
 
 
 export const {
-    setRawData,
+    plugToRequest,
     get,
     set,
     remove,

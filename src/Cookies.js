@@ -3,6 +3,7 @@ import isBrowser from 'is-browser'
 
 class Cookies {
     constructor() {
+        this.cookiesRaw = ''
         this.cookies = {}
     }
 
@@ -10,6 +11,12 @@ class Cookies {
         this.cookiesRaw = req.headers.cookie
         this.res = res
         this.parse()
+
+        return () => {
+            this.res = null
+            this.cookiesRaw = ''
+            this.cookies = {}
+        }
     }
 
     getRawData = () => isBrowser ? window.document.cookie : this.cookiesRaw
@@ -39,7 +46,7 @@ class Cookies {
 
         if (isBrowser) {
             window.document.cookie = this.stringify(key, value, opt)
-        } else {
+        } else if (this.res) {
             this.res.cookie(key, value, opt)
             this.cookies[key] = value
         }
@@ -54,7 +61,7 @@ class Cookies {
 
         if (isBrowser) {
             this.set(key, '', opt)
-        } else {
+        } else if (this.res) {
             this.res.clearCookie(key, opt)
             delete this.cookies[key]
         }
