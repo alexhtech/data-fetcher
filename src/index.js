@@ -3,12 +3,10 @@ export {default as Settings} from './Settings'
 export {fetcher, stringify, parse} from './utils/fetcher'
 export {fetcher as default} from './utils/fetcher'
 export {
-    setRawData,
-    parse,
-    get,
-    stringifyOptions,
-    set,
-    remove
+    setRawData as setRawDataCookie,
+    get as getCookie,
+    set as setCookie,
+    remove as removeCookie
 } from './utils/cookies'
 export {
     isAuthenticated,
