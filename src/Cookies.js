@@ -22,6 +22,7 @@ class Cookies {
     getRawData = () => isBrowser ? window.document.cookie : this.cookiesRaw
 
     parse = (raw = this.getRawData()) => {
+        if (!raw) return {}
         raw.split(';').forEach(item => {
             const i = item.indexOf('=')
             this.cookies[item.slice(0, i)] = item.slice(i + 1)
