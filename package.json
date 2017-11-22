@@ -1,6 +1,6 @@
 {
     "name": "data-fetcher",
-    "version": "0.0.2",
+    "version": "1.0.0.beta-1",
     "description": "It is just a wrapper around fetch",
     "repository": "git@github.com:alexolefirenko/data-fetcher.git",
     "author": "Alex <olefirenk@gmail.com>",
