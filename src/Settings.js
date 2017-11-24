@@ -1,10 +1,12 @@
 import {set, get, remove} from './utils/cookies'
 
+
 class Settings {
-    constructor(token = 'token', refreshToken = 'refreshToken', tokenPrefix = 'Bearer ') {
+    constructor({token = 'token', refreshToken = 'refreshToken', tokenPrefix = 'Bearer ', baseUrl = ''} = {}) {
         this.setTokenName(token)
         this.setRefreshTokenName(refreshToken)
         this.setTokenPrefix(tokenPrefix)
+        this.setBaseUrl(baseUrl)
     }
 
     isAuthenticated = () => !!this.getToken()
