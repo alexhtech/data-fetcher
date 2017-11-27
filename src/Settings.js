@@ -1,12 +1,19 @@
-import {set, get, remove} from './utils/cookies'
+import * as cookiesDefault from './utils/cookies'
 
 
 class Settings {
-    constructor({token = 'token', refreshToken = 'refreshToken', tokenPrefix = 'Bearer ', baseUrl = ''} = {}) {
+    constructor({
+                    token = 'token',
+                    refreshToken = 'refreshToken',
+                    tokenPrefix = 'Bearer ',
+                    baseUrl = ''
+                } = {},
+                cookies = cookiesDefault) {
         this.setTokenName(token)
         this.setRefreshTokenName(refreshToken)
         this.setTokenPrefix(tokenPrefix)
         this.setBaseUrl(baseUrl)
+        this.cookies = cookies
     }
 
     isAuthenticated = () => !!this.getToken()
@@ -18,18 +25,18 @@ class Settings {
 
     setToken = (token, options = {}) =>
         !token ?
-            remove(this.tokenName, options) :
-            set(this.tokenName, token, options)
+            this.cookies.remove(this.tokenName, options) :
+            this.cookies.set(this.tokenName, token, options)
 
 
-    getToken = () => get(this.tokenName)
+    getToken = () => this.cookies.get(this.tokenName)
 
     setRefreshToken = (refreshToken, options = {}) =>
         !refreshToken ?
-            remove(this.refreshTokenName, options) :
-            set(this.refreshTokenName, refreshToken)
+            this.cookies.remove(this.refreshTokenName, options) :
+            this.cookies.set(this.refreshTokenName, refreshToken)
 
-    getRefreshToken = () => get(this.refreshTokenName)
+    getRefreshToken = () => this.cookies.get(this.refreshTokenName)
 
     setTokenName = tokenName => {
         this.tokenName = tokenName

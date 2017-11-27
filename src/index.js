@@ -1,12 +1,9 @@
 export {default as Fetcher} from './Fetcher'
 export {default as Settings} from './Settings'
-export {fetcher, stringify, parse} from './utils/fetcher'
+export {fetcher, stringifyQuery, parseQuery} from './utils/fetcher'
 export {fetcher as default} from './utils/fetcher'
 export {
-    plugToRequest as plugCookieToRequest,
-    get as getCookie,
-    set as setCookie,
-    remove as removeCookie
+    plugToRequest as plugCookieToRequest
 } from './utils/cookies'
 export {
     isAuthenticated,
@@ -20,5 +17,6 @@ export {
     setTokenPrefix,
     getTokenPrefix,
     setBaseUrl,
-    getBaseUrl
+    getBaseUrl,
+    cookies
 } from './utils/settings'

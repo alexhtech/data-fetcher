@@ -13,5 +13,6 @@ export const {
     setTokenPrefix,
     getTokenPrefix,
     setBaseUrl,
-    getBaseUrl
+    getBaseUrl,
+    cookies
 } = new Settings()

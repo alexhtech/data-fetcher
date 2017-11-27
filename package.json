@@ -1,6 +1,6 @@
 {
     "name": "data-fetcher",
-    "version": "1.0.0-beta.2",
+    "version": "1.0.0-beta.3",
     "description": "It is just a wrapper around fetch",
     "repository": "git@github.com:alexolefirenko/data-fetcher.git",
     "author": "Alex <olefirenk@gmail.com>",
@@ -22,10 +22,8 @@
         "babel-preset-stage-2": "^6.24.1",
         "cross-env": "^5.1.1"
     },
-    "peerDependencies": {
-        "react-cookie": "1.0.5"
-    },
     "dependencies": {
-        "qs": "6.5.1"
+        "qs": "6.5.1",
+        "is-browser": "^2.0.1"
     }
 }

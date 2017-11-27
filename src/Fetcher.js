@@ -1,17 +1,18 @@
 import qs from 'qs'
-import {
-    getBaseUrl, isAuthenticated, getToken, getTokenPrefix
-} from './utils/settings'
-import {getRawData} from './utils/cookies'
+import * as defaults from './utils/settings'
 
 
 class Fetcher {
+    constructor(settings = defaults) {
+        this.settings = settings
+    }
+
     fetcher = (url, options = {}) => {
         const {
             params,
             queryParams,
             type = 'json',
-            baseUrl = getBaseUrl(),
+            baseUrl = this.settings.getBaseUrl(),
             method = 'get',
             customHeaders = false,
             query,
@@ -28,10 +29,10 @@ class Fetcher {
         let search = ''
         if (type === 'form-data') {
             args.body = body
-            search = this.stringify(queryParams || query)
+            search = this.stringifyQuery(queryParams || query)
         } else if (type === 'json') {
             if (args.method === 'GET') {
-                search = this.stringify(params || query)
+                search = this.stringifyQuery(params || query)
                 if (body) {
                     console.error('Warning: GET method doesn`t have a request body, you should use `query`')
                 }
@@ -40,20 +41,20 @@ class Fetcher {
                     args.body = JSON.stringify(params || body)
                 }
                 if (queryParams || query) {
-                    search = this.stringify(queryParams || query)
+                    search = this.stringifyQuery(queryParams || query)
                 }
             }
 
             args.headers.set('Accept', 'application/json')
             args.headers.set('Content-Type', 'application/json')
-            args.headers.set('cookie', getRawData())
+            args.headers.set('cookie', this.settings.cookies.getRawData())
         } else {
             throw new Error(`Type '${type}' - is not supported in the Fetcher`)
         }
 
 
-        if (isAuthenticated()) {
-            args.headers.set('Authorization', `${getTokenPrefix()}${getToken()}`)
+        if (this.settings.isAuthenticated()) {
+            args.headers.set('Authorization', `${this.settings.getTokenPrefix()}${this.settings.getToken()}`)
         }
 
         if (customHeaders) {
@@ -83,9 +84,9 @@ class Fetcher {
         })
     }
 
-    stringify = params => qs.stringify(params, {addQueryPrefix: true}) || ''
+    stringifyQuery = params => qs.stringify(params, {addQueryPrefix: true}) || ''
 
-    parse = queryString => qs.parse(queryString, {ignoreQueryPrefix: true})
+    parseQuery = queryString => qs.parse(queryString, {ignoreQueryPrefix: true})
 }
 
 
