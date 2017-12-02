@@ -1,9 +1,12 @@
+import * as settings from './utils/settings'
+
+
+export {settings}
 export {default as Fetcher} from './Fetcher'
 export {default as Settings} from './Settings'
 export {default as Cookies} from './Cookies'
 export {fetcher, stringifyQuery, parseQuery} from './utils/fetcher'
 export {fetcher as default} from './utils/fetcher'
-export * as settings from './utils/settings'
 export {
     isAuthenticated,
     logout,
@@ -19,4 +22,3 @@ export {
     getBaseUrl,
     cookies
 } from './utils/settings'
-

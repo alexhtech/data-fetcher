@@ -16,14 +16,16 @@ class Fetcher {
             method = 'get',
             customHeaders = false,
             query,
-            body
+            body,
+            ...rest
         } = options
 
         const args = {
             mode: 'cors',
             credentials: 'same-origin',
             method: method.toUpperCase(),
-            headers: new Headers()
+            headers: new Headers(),
+            ...rest
         }
 
         let search = ''
