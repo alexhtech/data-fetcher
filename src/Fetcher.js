@@ -70,15 +70,15 @@ class Fetcher {
 
                     if (data.status >= 400) {
                         if (contentType.indexOf('application/json') !== -1) {
-                            data.json().then(rej)
+                            data.json().then(json => rej(json, data))
                         } else {
-                            data.text().then(rej)
+                            data.text().then(text => rej(text, data))
                         }
                     } else {
                         if (contentType && contentType.indexOf('application/json') !== -1) {
-                            data.json().then(res)
+                            data.json().then(json => res(json, data))
                         } else {
-                            data.text().then(res)
+                            data.text().then(text => res(text, data))
                         }
                     }
                 })
