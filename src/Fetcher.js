@@ -17,6 +17,7 @@ class Fetcher {
             customHeaders = false,
             query,
             body,
+            withData = false,
             ...rest
         } = options
 
@@ -70,15 +71,39 @@ class Fetcher {
 
                     if (data.status >= 400) {
                         if (contentType.indexOf('application/json') !== -1) {
-                            data.json().then(json => rej(json, data))
+                            data.json().then(response => rej(
+                                withData ? {
+                                    response,
+                                    data
+                                } : response
+                                )
+                            )
                         } else {
-                            data.text().then(text => rej(text, data))
+                            data.text().then(response => rej(
+                                withData ? {
+                                    response,
+                                    data
+                                } : response
+                                )
+                            )
                         }
                     } else {
                         if (contentType && contentType.indexOf('application/json') !== -1) {
-                            data.json().then(json => res(json, data))
+                            data.json().then(response => res(
+                                withData ? {
+                                    response,
+                                    data
+                                } : response
+                                )
+                            )
                         } else {
-                            data.text().then(text => res(text, data))
+                            data.text().then(response => res(
+                                withData ? {
+                                    response,
+                                    data
+                                } : response
+                                )
+                            )
                         }
                     }
                 })
