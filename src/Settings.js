@@ -6,13 +6,15 @@ class Settings {
                     token = 'token',
                     refreshToken = 'refreshToken',
                     tokenPrefix = 'Bearer ',
-                    baseUrl = ''
+                    baseUrl = '',
+                    onFail
                 } = {},
                 cookies = cookiesDefault) {
         this.setTokenName(token)
         this.setRefreshTokenName(refreshToken)
         this.setTokenPrefix(tokenPrefix)
         this.setBaseUrl(baseUrl)
+        this.setOnFail(onFail)
         this.cookies = cookies
     }
 
@@ -57,6 +59,10 @@ class Settings {
     }
 
     getBaseUrl = () => this.baseUrl
+
+    setOnFail = (onFail) => {
+        this.onFail = onFail
+    }
 }
 
 

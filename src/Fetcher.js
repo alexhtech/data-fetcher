@@ -71,20 +71,12 @@ class Fetcher {
 
                     if (data.status >= 400) {
                         if (contentType.indexOf('application/json') !== -1) {
-                            data.json().then(response => rej(
-                                withData ? {
-                                    response,
-                                    data
-                                } : response
-                                )
+                            data.json().then(response =>
+                                rej({response, data})
                             )
                         } else {
-                            data.text().then(response => rej(
-                                withData ? {
-                                    response,
-                                    data
-                                } : response
-                                )
+                            data.text().then(response =>
+                                rej({response, data})
                             )
                         }
                     } else {
@@ -107,7 +99,12 @@ class Fetcher {
                         }
                     }
                 })
-                .catch(rej)
+                .catch(e => {
+                    if (typeof this.settings.onFail === 'function') {
+                        return this.settings.onFail(e, {url, options})
+                    }
+                    return e
+                })
         })
     }
 
