@@ -20,5 +20,6 @@ export {
     getTokenPrefix,
     setBaseUrl,
     getBaseUrl,
-    cookies
+    cookies,
+    setOnFail
 } from './utils/settings'

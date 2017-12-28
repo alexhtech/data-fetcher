@@ -1,5 +1,5 @@
 import qs from 'qs'
-import * as defaults from './utils/settings'
+import defaults from './utils/settings'
 
 
 class Fetcher {
@@ -7,7 +7,7 @@ class Fetcher {
         this.settings = settings
     }
 
-    fetcher = (url, options = {}) => {
+    fetcher = async (url, options = {}, catchError = true) => {
         const {
             params,
             queryParams,
@@ -64,49 +64,44 @@ class Fetcher {
             args.headers = customHeaders
         }
 
-        return new Promise((res, rej) => {
-            fetch(baseUrl + url + search, args)
-                .then(data => {
-                    const contentType = data.headers.get('content-type')
+        try {
+            const data = await fetch(baseUrl + url + search, args)
+            const contentType = data.headers.get('content-type')
 
-                    if (data.status >= 400) {
-                        if (contentType.indexOf('application/json') !== -1) {
-                            data.json().then(response =>
-                                rej({response, data})
-                            )
-                        } else {
-                            data.text().then(response =>
-                                rej({response, data})
-                            )
-                        }
-                    } else {
-                        if (contentType && contentType.indexOf('application/json') !== -1) {
-                            data.json().then(response => res(
-                                withData ? {
-                                    response,
-                                    data
-                                } : response
-                                )
-                            )
-                        } else {
-                            data.text().then(response => res(
-                                withData ? {
-                                    response,
-                                    data
-                                } : response
-                                )
-                            )
-                        }
-                    }
-                })
-                .catch(e => {
-                    if (typeof this.settings.onFail === 'function') {
-                        return this.settings.onFail(e, {url, options})
-                    }
-                    return e
-                })
-        })
+            if (data.status >= 400) {
+                let response
+
+                if (contentType.indexOf('application/json') !== -1) {
+                    response = await data.json()
+                } else {
+                    response = await data.text()
+                }
+
+                throw {response, data}
+            } else {
+                let response
+
+                if (contentType && contentType.indexOf('application/json') !== -1) {
+                    response = await data.json()
+                } else {
+                    response = await data.text()
+                }
+
+                return withData ? {response, data} : response
+            }
+        } catch (e) {
+            if (catchError && typeof this.settings.onFail === 'function') {
+                try {
+                    return await this.settings.onFail(e, {url, options})
+                } catch (e) {
+                    throw e
+                }
+            } else {
+                throw e
+            }
+        }
     }
+
 
     stringifyQuery = params => qs.stringify(params, {addQueryPrefix: true}) || ''
 

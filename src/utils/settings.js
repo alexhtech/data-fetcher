@@ -1,6 +1,8 @@
 import Settings from '../Settings'
 
 
+const settings = new Settings()
+
 export const {
     isAuthenticated,
     logout,
@@ -14,5 +16,8 @@ export const {
     getTokenPrefix,
     setBaseUrl,
     getBaseUrl,
-    cookies
-} = new Settings()
+    cookies,
+    setOnFail
+} = settings
+
+export default settings

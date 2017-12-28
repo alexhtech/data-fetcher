@@ -25,7 +25,7 @@ class Cookies {
         if (!raw) return {}
         raw.split(';').forEach(item => {
             const i = item.indexOf('=')
-            this.cookies[item.slice(0, i)] = item.slice(i + 1)
+            this.cookies[item.slice(0, i).trim()] = item.slice(i + 1)
         })
         return this.cookies
     }
@@ -42,6 +42,7 @@ class Cookies {
     set = (key, value, {maxAge, ...rest} = {}) => {
         const opt = {
             maxAge: maxAge * 1000,
+            path: '/',
             ...rest
         }
 
