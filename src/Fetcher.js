@@ -9,8 +9,6 @@ class Fetcher {
 
     fetcher = async (url, options = {}, catchError = true) => {
         const {
-            params,
-            queryParams,
             type = 'json',
             baseUrl = this.settings.getBaseUrl(),
             method = 'get',
@@ -32,19 +30,19 @@ class Fetcher {
         let search = ''
         if (type === 'form-data') {
             args.body = body
-            search = this.stringifyQuery(queryParams || query)
+            search = this.stringifyQuery(query)
         } else if (type === 'json') {
             if (args.method === 'GET') {
-                search = this.stringifyQuery(params || query)
+                search = this.stringifyQuery(query)
                 if (body) {
                     console.error('Warning: GET method doesn`t have a request body, you should use `query`')
                 }
             } else {
-                if (params || body) {
-                    args.body = JSON.stringify(params || body)
+                if (body) {
+                    args.body = typeof body === 'string' ? body : JSON.stringify(body)
                 }
-                if (queryParams || query) {
-                    search = this.stringifyQuery(queryParams || query)
+                if (query) {
+                    search = this.stringifyQuery(query)
                 }
             }
 
