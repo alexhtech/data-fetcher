@@ -1,25 +1,18 @@
-import * as settings from './utils/settings'
+import Fetcher from './Fetcher'
 
 
-export {settings}
-export {default as Fetcher} from './Fetcher'
-export {default as Settings} from './Settings'
-export {default as Cookies} from './Cookies'
-export {fetcher, stringifyQuery, parseQuery} from './utils/fetcher'
-export {fetcher as default} from './utils/fetcher'
+const defaults = Fetcher.defaults
+
+const {
+    fetcher,
+    stringifyQuery,
+    parseQuery
+} = new Fetcher()
+
 export {
-    isAuthenticated,
-    logout,
-    setToken,
-    getToken,
-    setRefreshToken,
-    getRefreshToken,
-    setTokenName,
-    setRefreshTokenName,
-    setTokenPrefix,
-    getTokenPrefix,
-    setBaseUrl,
-    getBaseUrl,
-    cookies,
-    setOnFail
-} from './utils/settings'
+    fetcher as default,
+    stringifyQuery,
+    parseQuery,
+    defaults,
+    Fetcher
+}

@@ -1,18 +1,29 @@
 import qs from 'qs'
-import defaults from './utils/settings'
 
 
 class Fetcher {
-    constructor(settings = defaults) {
-        this.settings = settings
+    constructor(config = Fetcher.defaults) {
+        this.config = config
+    }
+
+    static defaults = {
+        baseUrl: '',
+        args: {
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }
     }
 
     fetcher = async (url, options = {}, catchError = true) => {
         const {
             type = 'json',
-            baseUrl = this.settings.getBaseUrl(),
+            baseUrl = this.config.baseUrl,
             method = 'get',
-            customHeaders = false,
+            headers = false,
             query,
             body,
             withData = false,
@@ -20,10 +31,8 @@ class Fetcher {
         } = options
 
         const args = {
-            mode: 'cors',
-            credentials: 'same-origin',
+            ...this.config.args,
             method: method.toUpperCase(),
-            headers: new Headers(),
             ...rest
         }
 
@@ -45,21 +54,14 @@ class Fetcher {
                     search = this.stringifyQuery(query)
                 }
             }
-
-            args.headers.set('Accept', 'application/json')
-            args.headers.set('Content-Type', 'application/json')
-            args.headers.set('cookie', this.settings.cookies.getRawData())
         } else {
             throw new Error(`Type '${type}' - is not supported in the Fetcher`)
         }
 
-
-        if (this.settings.isAuthenticated()) {
-            args.headers.set('Authorization', `${this.settings.getTokenPrefix()}${this.settings.getToken()}`)
-        }
-
-        if (customHeaders) {
-            args.headers = customHeaders
+        if (typeof headers === 'object') {
+            Object.keys(headers).forEach(key => {
+                args.headers[key] = headers[key]
+            })
         }
 
         try {
@@ -67,15 +69,15 @@ class Fetcher {
             const contentType = data.headers.get('content-type')
 
             if (data.status >= 400) {
-                let response
+                let error
 
-                if (contentType.indexOf('application/json') !== -1) {
-                    response = await data.json()
+                if (contentType && contentType.indexOf('application/json') !== -1) {
+                    error = await data.json()
                 } else {
-                    response = await data.text()
+                    error = await data.text()
                 }
 
-                throw {response, data}
+                throw {error, data}
             } else {
                 let response
 
@@ -88,14 +90,11 @@ class Fetcher {
                 return withData ? {response, data} : response
             }
         } catch (e) {
-            if (catchError && typeof this.settings.onFail === 'function') {
-                try {
-                    return await this.settings.onFail(e, {url, options})
-                } catch (e) {
-                    throw e
-                }
+            const error = e.data ? e : {data: e}
+            if (catchError && typeof this.config.onFail === 'function') {
+                return this.config.onFail(error, {url, options})
             } else {
-                throw e
+                throw error
             }
         }
     }
