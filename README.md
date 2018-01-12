@@ -1,4 +1,9 @@
 # data-fetcher
+
+[![npm version](https://img.shields.io/npm/v/data-fetcher.svg?style=flat-square)](https://www.npmjs.org/package/data-fetcher)
+[![npm downloads](https://img.shields.io/npm/dm/data-fetcher.svg?style=flat-square)](http://npm-stat.com/charts.html?package=data-fetcher)
+
+
 This is a simple and powerful promise based wrapper around native `fetch` or `node-fetch` for node.js
 
 ## Usage
@@ -34,7 +39,7 @@ fetcher('http://example.com/users', {
 })
 ```
 
-### Defaults
+## Defaults
 
 ```js
 import {defaults} from 'data-fetcher'
@@ -82,7 +87,7 @@ fetcher('/login', {
 })
 ```
 
-### Custom headers
+## Custom headers
 
 ```js
 fetcher('/users', {
@@ -115,7 +120,7 @@ const login = async body => {
 
 > This way you can add any properties to the defaults.args that will be passed to fetch() as second argument or add it individually to fetcher() as second argument too
 
-### onFail handler
+## onFail handler
 if your token might be die after some time probably you will want to update it. It is do this way
 
 `./src/storage.js`
@@ -165,7 +170,7 @@ defaults.onFail = async (e, params) => {
                 refreshToken
             },
             method: 'post'
-        }, false) // false, won't run error handler `onFail` if request is fail. // default false
+        }, false) // false, won't run error handler `onFail` if request is fail. // default true
 
         setToken(newToken)
         setRefreshToken(newRefreshToken)
@@ -179,7 +184,7 @@ defaults.onFail = async (e, params) => {
 
 > Then if one of your requests crashed with 401 status code and you have a refresh token will send request to update token and setup newToken and newRefreshToken and most important request which was crashed will resend again with new credentials. It will look like your request was sended without any troubles
 
-### Package contents
+## Package contents
 
 ```js
 import fetcher, {fetcher, defaults, stringifyQuery, parseQuery, Fetcher} from 'data-fetcher'
