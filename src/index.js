@@ -14,5 +14,6 @@ export {
     stringifyQuery,
     parseQuery,
     defaults,
-    Fetcher
+    Fetcher,
+    fetcher
 }
