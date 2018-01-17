@@ -23,20 +23,29 @@ class Fetcher {
             type = 'json',
             baseUrl = this.config.baseUrl,
             method = 'get',
-            headers = false,
+            headers = {},
             query,
             body,
             withData = false,
             ...rest
         } = options
 
+        const {args: {headers: baseHeaders, ...restArgs}} = this.config
+
         const args = {
-            ...this.config.args,
+            ...restArgs,
             method: method.toUpperCase(),
-            ...rest
+            ...rest,
+            headers: {
+                ...baseHeaders,
+                ...headers
+            }
         }
 
+
         let search = ''
+
+
         if (type === 'form-data') {
             args.body = body
             search = this.stringifyQuery(query)
@@ -57,12 +66,6 @@ class Fetcher {
             }
         } else {
             throw new Error(`Type '${type}' - is not supported in the Fetcher`)
-        }
-
-        if (typeof headers === 'object') {
-            Object.keys(headers).forEach(key => {
-                args.headers[key] = headers[key]
-            })
         }
 
         try {
