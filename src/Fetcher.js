@@ -40,6 +40,7 @@ class Fetcher {
         if (type === 'form-data') {
             args.body = body
             search = this.stringifyQuery(query)
+            delete args.headers['Content-Type']
         } else if (type === 'json') {
             if (args.method === 'GET') {
                 search = this.stringifyQuery(query)
