@@ -1,6 +1,6 @@
 {
     "name": "data-fetcher",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "description": "It is just a wrapper around fetch",
     "repository": "git@github.com:alexolefirenko/data-fetcher.git",
     "author": "Alex <olefirenk@gmail.com>",
@@ -8,6 +8,7 @@
     "main": "./commonjs/index.js",
     "module": "./es6/index.js",
     "jsnext:main": "./es6/index.js",
+    "typings": "./types/index.d.ts",
     "scripts": {
         "build:es6": "cross-env NODE_ENV=es6 babel src --out-dir ./es6",
         "build:commonjs": "cross-env NODE_ENV=commonjs babel src --out-dir ./commonjs",
