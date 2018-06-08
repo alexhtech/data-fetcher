@@ -4,3 +4,5 @@
 /yarn.lock
 /commonjs
 /es6
+/dist
+/types
