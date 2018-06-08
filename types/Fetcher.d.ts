@@ -11,12 +11,6 @@ export interface IConfig {
         options: IOptions;
     }): Promise<void>;
 }
-export interface IFetcher {
-    config?: IConfig;
-    fetcher(url: string, options: IOptions, catchError: boolean): Promise<any>;
-    parseQuery(queryString: string): any;
-    stringifyQuery(params: object): string;
-}
 export interface IOptions extends IArgs {
     baseUrl?: string;
     type?: string;
@@ -25,10 +19,10 @@ export interface IOptions extends IArgs {
     withData?: boolean;
 }
 export declare const defaults: IConfig;
-export default class Fetcher implements IFetcher {
+export default class Fetcher {
     config: IConfig;
     constructor(config?: IConfig);
-    fetcher(url: string, options?: IOptions, catchError?: boolean): Promise<any>;
-    stringifyQuery(params?: object): string;
-    parseQuery(queryString: string): any;
+    fetcher: (url: string, options?: IOptions, catchError?: boolean) => Promise<any>;
+    stringifyQuery: (params?: object | undefined) => string;
+    parseQuery: (queryString: string) => any;
 }

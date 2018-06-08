@@ -10,24 +10,48 @@
     "jsnext:main": "./es6/index.js",
     "typings": "./types/index.d.ts",
     "scripts": {
-        "build:es6": "cross-env NODE_ENV=es6 babel src --out-dir ./es6",
-        "build:commonjs": "cross-env NODE_ENV=commonjs babel src --out-dir ./commonjs",
+        "build:es6": "cross-env tsc --target es6 --outDir ./es6",
+        "build:commonjs": "cross-env tsc --target es5 --module commonjs --outDir ./commonjs",
         "build": "npm run clean && npm run build:es6 && npm run build:commonjs",
         "clean": "rm -rf ./commonjs ./es6",
         "test": "jest",
+        "test:coverage": "jest --coverage",
         "deploy": "yarn test && yarn build && yarn publish"
     },
     "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-plugin-transform-runtime": "^6.23.0",
-        "babel-preset-env": "^1.6.0",
-        "babel-preset-react": "^6.24.1",
-        "babel-preset-stage-2": "^6.24.1",
-        "cross-env": "^5.1.1"
+        "@types/jest": "^23.0.0",
+        "@types/node-fetch": "^2.1.1",
+        "cross-env": "^5.1.1",
+        "eslint": "^4.19.1",
+        "eslint-config-airbnb": "^16.1.0",
+        "eslint-plugin-import": "^2.12.0",
+        "eslint-plugin-jsx-a11y": "^6.0.3",
+        "eslint-plugin-prettier": "^2.6.0",
+        "eslint-plugin-react": "^7.9.1",
+        "jest": "^23.1.0",
+        "node-fetch": "^2.1.2",
+        "prettier": "^1.13.5",
+        "ts-jest": "^22.4.6",
+        "typescript": "^2.9.1",
+        "typescript-eslint-parser": "^16.0.0"
     },
     "dependencies": {
+        "@types/qs": "^6.5.1",
         "is-browser": "^2.0.1",
-        "jest": "^22.0.6",
         "qs": "6.5.1"
+    },
+    "jest": {
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ]
     }
 }

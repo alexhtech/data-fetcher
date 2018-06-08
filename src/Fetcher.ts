@@ -1,24 +1,43 @@
-import qs from 'qs'
+import * as qs from 'qs'
 
+export interface IArgs extends RequestInit {
+    headers?: {
+        [key: string]: string
+    }
+}
 
-class Fetcher {
-    constructor(config = Fetcher.defaults) {
+export interface IConfig {
+    baseUrl?: string
+    args: IArgs
+    onFail?(error: any, data: { url: string; options: IOptions }): Promise<void>
+}
+
+export interface IOptions extends IArgs {
+    baseUrl?: string
+    type?: string
+    query?: object
+    body?: any
+    withData?: boolean
+}
+
+export const defaults: IConfig = {
+    baseUrl: '',
+    args: {
+        mode: 'cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }
+}
+
+export default class Fetcher {
+    constructor(public config: IConfig = defaults) {
         this.config = config
     }
 
-    static defaults = {
-        baseUrl: '',
-        args: {
-            mode: 'cors',
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }
-    }
-
-    fetcher = async (url, options = {}, catchError = true) => {
+    fetcher = async (url: string, options: IOptions = {}, catchError = true) => {
         const {
             type = 'json',
             baseUrl = this.config.baseUrl,
@@ -30,7 +49,9 @@ class Fetcher {
             ...rest
         } = options
 
-        const {args: {headers: baseHeaders, ...restArgs}} = this.config
+        const {
+            args: { headers: baseHeaders, ...restArgs }
+        } = this.config
 
         const args = {
             ...restArgs,
@@ -42,9 +63,7 @@ class Fetcher {
             }
         }
 
-
         let search = ''
-
 
         if (type === 'form-data') {
             args.body = body
@@ -81,7 +100,7 @@ class Fetcher {
                     error = await data.text()
                 }
 
-                throw {error, data}
+                throw { error, data }
             } else {
                 let response
 
@@ -91,25 +110,22 @@ class Fetcher {
                     response = await data.text()
                 }
 
-                return withData ? {response, data} : response
+                return withData ? { response, data } : response
             }
         } catch (e) {
-            const error = e.data ? e : {data: e}
+            const error = e.data ? e : { data: e }
             if (catchError && typeof this.config.onFail === 'function') {
-                return this.config.onFail(error, {url, options})
-            } else {
-                throw error
+                return this.config.onFail(error, { url, options })
             }
+            throw error
         }
     }
 
+    stringifyQuery = (params?: object) => {
+        return qs.stringify(params, { addQueryPrefix: true }) || ''
+    }
 
-    stringifyQuery = params => qs.stringify(params, {addQueryPrefix: true}) || ''
-
-    parseQuery = queryString => qs.parse(queryString, {ignoreQueryPrefix: true})
-}
-
-
-export {
-    Fetcher as default
+    parseQuery = (queryString: string) => {
+        return qs.parse(queryString, { ignoreQueryPrefix: true })
+    }
 }
