@@ -10,6 +10,10 @@ export interface IConfig {
     baseUrl?: string
     args: IArgs
     onFail?(error: any, data: { url: string; options: IOptions }): Promise<void>
+    qs: {
+        stringify: qs.IStringifyOptions
+        parse: qs.IParseOptions
+    }
 }
 
 export interface IOptions extends IArgs {
@@ -28,6 +32,14 @@ export const defaults: IConfig = {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json'
+        }
+    },
+    qs: {
+        stringify: {
+            addQueryPrefix: true
+        },
+        parse: {
+            ignoreQueryPrefix: true
         }
     }
 }
@@ -122,10 +134,10 @@ export default class Fetcher {
     }
 
     stringifyQuery = (params?: object) => {
-        return qs.stringify(params, { addQueryPrefix: true }) || ''
+        return qs.stringify(params, this.config.qs.stringify) || ''
     }
 
     parseQuery = (queryString: string) => {
-        return qs.parse(queryString, { ignoreQueryPrefix: true })
+        return qs.parse(queryString, this.config.qs.parse)
     }
 }
