@@ -18,7 +18,7 @@ export interface IConfig {
 
 export interface IOptions extends IArgs {
     baseUrl?: string
-    type?: string
+    type?: 'form-data' | 'json'
     query?: object
     body?: any
     withData?: boolean
